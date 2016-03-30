@@ -105,6 +105,19 @@ class Scanner {
                     while (ch != '\n' && ch != EOFCH) {
                         nextCh();
                     }
+                } 
+                /* 
+                 * Exercise 2.10 Modify Scanner in the j-- compiler to scan (and ignore) 
+                 * Java multi-line comments.
+                 */
+                else if (ch == '*'){ // Multi-line comment
+                    char prevCh = ch;
+                    nextCh();
+                    while (ch != '/' && prevCh != '*' && ch != EOFCH) {
+                        prevCh = ch;
+                        nextCh();
+                    }
+                    
                 } else {
                     reportScannerError("Operator / is not supported in j--.");
                 }
