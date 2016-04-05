@@ -67,7 +67,7 @@ class Scanner {
         reserved.put(BYTE.image(), BYTE); //added Exercise 2.12
         reserved.put(CASE.image(), CASE); //added Exercise 2.12
         reserved.put(CATCH.image(), CATCH); //added Exercise 2.12
-        reserved.put(CHAR.image(), CHAR); //added Exercise 2.12
+        reserved.put(CHAR.image(), CHAR); 
         reserved.put(CLASS.image(), CLASS);
         reserved.put(CONST.image(), CONST); //added Exercise 2.12
         reserved.put(CONTINUE.image(), CONTINUE); //added Exercise 2.12
