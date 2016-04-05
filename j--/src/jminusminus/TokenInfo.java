@@ -8,21 +8,44 @@ package jminusminus;
  * 
  * When you add a new token to the scanner, you must also add an entry to this
  * enum specifying the kind and image of the new token.
+ * 
+ * @version 05 April 2016
+ * @author Modified by: Jonathan Hughes 
+ * @author Original: Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
  */
 
 enum TokenKind {
-    EOF("<EOF>"), ABSTRACT("abstract"), BOOLEAN("boolean"), CHAR("char"), CLASS(
-            "class"), ELSE("else"), EXTENDS("extends"), FALSE("false"), IF("if"), IMPORT(
-            "import"), INSTANCEOF("instanceof"), INT("int"), NEW("new"), NULL(
-            "null"), PACKAGE("package"), PRIVATE("private"), PROTECTED(
-            "protected"), PUBLIC("public"), RETURN("return"), STATIC("static"), SUPER(
-            "super"), THIS("this"), TRUE("true"), VOID("void"), WHILE("while"), PLUS(
-            "+"), ASSIGN("="), DEC("--"), EQUAL("=="), GT(">"), INC("++"), LAND(
-            "&&"), LE("<="), LNOT("!"), MINUS("-"), PLUS_ASSIGN("+="), STAR("*"), LPAREN(
-            "("), RPAREN(")"), LCURLY("{"), RCURLY("}"), LBRACK("["), RBRACK(
-            "]"), SEMI(";"), COMMA(","), DOT("."), IDENTIFIER("<IDENTIFIER>"), INT_LITERAL(
-            "<INT_LITERAL>"), CHAR_LITERAL("<CHAR_LITERAL>"), STRING_LITERAL(
-            "<STRING_LITERAL>");
+    EOF("<EOF>"), 
+            //Keywords (53)
+            ABSTRACT("abstract"), ASSERT("assert"), BOOLEAN("boolean"), BREAK("break"), 
+            BYTE("byte"), CASE("case"), CATCH("catch"), CHAR("char"), CLASS("class"), 
+            CONST("const"), CONTINUE("continue"), DEFAULT("default"), DO("do"), DOUBLE("double"),
+            ELSE("else"), ENUM("enum"), EXTENDS("extends"), FALSE("false"), FINAL("final"), 
+            FINALLY("finally"), FLOAT("float"), FOR("for"), GOTO("goto"), IF("if"), 
+            IMPLEMENTS("implements"), IMPORT("import"), INSTANCEOF("instanceof"), INT("int"), 
+            INTERFACE("interface"), LONG("long"), NATIVE("native"), NEW("new"), NULL("null"), 
+            PACKAGE("package"), PRIVATE("private"), PROTECTED("protected"), PUBLIC("public"), 
+            RETURN("return"), SHORT("short"), STATIC("static"), STRICTFP("strictfp"), 
+            SUPER("super"), SWITCH("switch"), SYNCHRONIZED("synchronized"), THIS("this"), 
+            THROW("throw"), THROWS("throws"), TRANSIENT("transient"), TRUE("true"), 
+            TRY("try"), VOID("void"), VOLATILE("volatile"), WHILE("while"), 
+            
+            //Operators (38)
+            PLUS("+"), ASSIGN("="), DEC("--"), EQUAL("=="), GT(">"), INC("++"), LAND("&&"), 
+            LE("<="), LT("<"), LNOT("!"), MINUS("-"), PLUS_ASSIGN("+="), STAR("*"), QM("?"),
+            BWCOMP("~"), NOT_EQUAL("!="), DIV("/"), DIV_ASSIGN("/="), MINUS_ASSIGN("-="),
+            STAR_ASSIGN("*="), MOD("%"), MOD_ASSIGN("%="), RSHIFT(">>"), COLON(":"),
+            RSHIFT_ASSIGN(">>="), RSHIFT_ZF(">>>"), RSHIFT_ZF_ASSIGN(">>>="), GE(">="),
+            LSHIFT("<<"), LSHIFT_ASSIGN("<<="), BWXOR("^"), BWXOR_ASSIGN("^="), BWOR("|"),
+            BWOR_ASSIGN("|="), LOR("||"), BWAND("&"), BWAND_ASSIGN("&="), LAMBDA("->"),
+            
+            //Separators (9)
+            LPAREN("("), RPAREN(")"), LCURLY("{"), RCURLY("}"), LBRACK("["), RBRACK("]"), 
+            SEMI(";"), COMMA(","), DOT("."), 
+            
+            //Literals
+            IDENTIFIER("<IDENTIFIER>"), INT_LITERAL("<INT_LITERAL>"), 
+            CHAR_LITERAL("<CHAR_LITERAL>"), STRING_LITERAL("<STRING_LITERAL>");
 
     /** The token's string representation. */
     private String image;

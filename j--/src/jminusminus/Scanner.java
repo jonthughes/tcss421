@@ -15,6 +15,10 @@ import static jminusminus.TokenKind.*;
  * When you add a new token to the scanner, you must also add an entry in the
  * TokenKind enum in TokenInfo.java specifying the kind and image of the new
  * token.
+ * 
+ * @version 05 April 2016
+ * @author Modified by: Jonathan Hughes 
+ * @author Original: Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
  */
 
 class Scanner {
@@ -57,16 +61,36 @@ class Scanner {
         // Keywords in j--
         reserved = new Hashtable<String, TokenKind>();
         reserved.put(ABSTRACT.image(), ABSTRACT);
+        reserved.put(ASSERT.image(), ASSERT); //added Exercise 2.12
         reserved.put(BOOLEAN.image(), BOOLEAN);
-        reserved.put(CHAR.image(), CHAR);
+        reserved.put(BREAK.image(), BREAK); //added Exercise 2.12
+        reserved.put(BYTE.image(), BYTE); //added Exercise 2.12
+        reserved.put(CASE.image(), CASE); //added Exercise 2.12
+        reserved.put(CATCH.image(), CATCH); //added Exercise 2.12
+        reserved.put(CHAR.image(), CHAR); //added Exercise 2.12
         reserved.put(CLASS.image(), CLASS);
+        reserved.put(CONST.image(), CONST); //added Exercise 2.12
+        reserved.put(CONTINUE.image(), CONTINUE); //added Exercise 2.12
+        reserved.put(DEFAULT.image(), DEFAULT); //added Exercise 2.12
+        reserved.put(DO.image(), DO); //added Exercise 2.12
+        reserved.put(DOUBLE.image(), DOUBLE); //added Exercise 2.12
         reserved.put(ELSE.image(), ELSE);
+        reserved.put(ENUM.image(), ENUM); //added Exercise 2.12
         reserved.put(EXTENDS.image(), EXTENDS);
         reserved.put(FALSE.image(), FALSE);
+        reserved.put(FINAL.image(), FINAL); //added Exercise 2.12
+        reserved.put(FINALLY.image(), FINALLY); //added Exercise 2.12
+        reserved.put(FLOAT.image(), FLOAT); //added Exercise 2.12
+        reserved.put(FOR.image(), FOR); //added Exercise 2.12
+        reserved.put(GOTO.image(), GOTO); //added Exercise 2.12
         reserved.put(IF.image(), IF);
+        reserved.put(IMPLEMENTS.image(), IMPLEMENTS); //added Exercise 2.12
         reserved.put(IMPORT.image(), IMPORT);
         reserved.put(INSTANCEOF.image(), INSTANCEOF);
         reserved.put(INT.image(), INT);
+        reserved.put(INTERFACE.image(), INTERFACE); //added Exercise 2.12
+        reserved.put(LONG.image(), LONG); //added Exercise 2.12
+        reserved.put(NATIVE.image(), NATIVE); //added Exercise 2.12
         reserved.put(NEW.image(), NEW);
         reserved.put(NULL.image(), NULL);
         reserved.put(PACKAGE.image(), PACKAGE);
@@ -74,11 +98,20 @@ class Scanner {
         reserved.put(PROTECTED.image(), PROTECTED);
         reserved.put(PUBLIC.image(), PUBLIC);
         reserved.put(RETURN.image(), RETURN);
+        reserved.put(SHORT.image(), SHORT); //added Exercise 2.12
         reserved.put(STATIC.image(), STATIC);
+        reserved.put(STRICTFP.image(), STRICTFP); //added Exercise 2.12
         reserved.put(SUPER.image(), SUPER);
+        reserved.put(SWITCH.image(), SWITCH); //added Exercise 2.12
+        reserved.put(SYNCHRONIZED.image(), SYNCHRONIZED); //added Exercise 2.12
         reserved.put(THIS.image(), THIS);
+        reserved.put(THROW.image(), THROW); //added Exercise 2.12
+        reserved.put(THROWS.image(), THROWS); //added Exercise 2.12
+        reserved.put(TRANSIENT.image(), TRANSIENT); //added Exercise 2.12
         reserved.put(TRUE.image(), TRUE);
+        reserved.put(TRY.image(), TRY); //added Exercise 2.12
         reserved.put(VOID.image(), VOID);
+        reserved.put(VOLATILE.image(), VOLATILE); //added Exercise 2.12
         reserved.put(WHILE.image(), WHILE);
 
         // Prime the pump.
@@ -105,21 +138,19 @@ class Scanner {
                     while (ch != '\n' && ch != EOFCH) {
                         nextCh();
                     }
-                } 
-                /* 
-                 * Exercise 2.10 Modify Scanner in the j-- compiler to scan (and ignore) 
-                 * Java multi-line comments.
-                 */
-                else if (ch == '*'){ // Multi-line comment
+                }                 
+                else if (ch == '*'){ // Ignore multi-line comment Exercise 2.10
                     char prevCh = ch;
                     nextCh();
-                    while (ch != '/' && prevCh != '*' && ch != EOFCH) {
+                    while (!(ch == '/' && prevCh == '*') && ch != EOFCH) {
                         prevCh = ch;
                         nextCh();
-                    }
-                    
-                } else {
-                    reportScannerError("Operator / is not supported in j--.");
+                    }  
+                    nextCh();
+                } else if (ch == '='){ //added Exercise 2.11
+                    return new TokenInfo (DIV_ASSIGN , line );
+                } else { //added Exercise 2.11
+                    return new TokenInfo (DIV , line );
                 }
             } else {
                 moreWhiteSpace = false;
@@ -161,10 +192,21 @@ class Scanner {
             }
         case '!':
             nextCh();
-            return new TokenInfo(LNOT, line);
+            if (ch == '=') { //added Exercise 2.11
+                nextCh();
+                return new TokenInfo(NOT_EQUAL, line);
+            } else {
+                return new TokenInfo(LNOT, line);
+            }         
         case '*':
             nextCh();
-            return new TokenInfo(STAR, line);
+            if (ch == '=') { //added Exercise 2.11
+                nextCh();
+                return new TokenInfo(STAR_ASSIGN, line);
+            } else {
+                nextCh();
+                return new TokenInfo(STAR, line);
+            }
         case '+':
             nextCh();
             if (ch == '=') {
@@ -181,6 +223,12 @@ class Scanner {
             if (ch == '-') {
                 nextCh();
                 return new TokenInfo(DEC, line);
+            } else if (ch == '=') { //added Exercise 2.11
+                nextCh();
+                return new TokenInfo(MINUS_ASSIGN, line);
+            } else if (ch == '>') { //added Exercise 2.11
+                nextCh();
+                return new TokenInfo(LAMBDA, line);
             } else {
                 return new TokenInfo(MINUS, line);
             }
@@ -189,21 +237,87 @@ class Scanner {
             if (ch == '&') {
                 nextCh();
                 return new TokenInfo(LAND, line);
-            } else {
-                reportScannerError("Operator & is not supported in j--.");
-                return getNextToken();
+            } else if (ch == '=') { //added Exercise 2.11
+                nextCh();
+                return new TokenInfo(BWAND_ASSIGN, line);
+            } else { //added Exercise 2.11
+                return new TokenInfo(BWAND, line);
             }
         case '>':
             nextCh();
-            return new TokenInfo(GT, line);
+            if (ch == '>') { //added Exercise 2.11
+                nextCh();
+                if (ch == '>') { //added Exercise 2.11
+                    nextCh();
+                    if (ch == '=') { //added Exercise 2.11
+                        nextCh();
+                        return new TokenInfo(RSHIFT_ZF_ASSIGN, line);
+                    } else {
+                        return new TokenInfo(RSHIFT_ZF, line);
+                    }
+                } else if (ch == '=') { //added Exercise 2.11
+                    nextCh();
+                    return new TokenInfo(RSHIFT_ASSIGN, line);
+                } else { //added Exercise 2.11
+                    return new TokenInfo(RSHIFT, line);
+                }
+            } else if (ch == '=') { //added Exercise 2.11
+                nextCh();
+                return new TokenInfo(GE, line);
+            } else {
+                return new TokenInfo(GT, line);
+            }
         case '<':
             nextCh();
-            if (ch == '=') {
+            if (ch == '<') { //added Exercise 2.11
+                nextCh();
+                if (ch == '=') { //added Exercise 2.11
+                    nextCh();
+                    return new TokenInfo(LSHIFT_ASSIGN, line);
+                } else { //added Exercise 2.11
+                    return new TokenInfo(LSHIFT, line);
+                }
+            } else if (ch == '=') {
                 nextCh();
                 return new TokenInfo(LE, line);
+            } else { //added Exercise 2.11
+                return new TokenInfo(LT, line);
+            }
+        case '?': //added Exercise 2.11
+            nextCh();
+            return new TokenInfo(QM, line);
+        case '~': //added Exercise 2.11
+            nextCh();
+            return new TokenInfo(BWCOMP, line);
+        case ':': //added Exercise 2.11
+            nextCh();
+            return new TokenInfo(COLON, line);
+        case '%': //added Exercise 2.11
+            if (ch == '=') {
+                nextCh();
+                return new TokenInfo(MOD_ASSIGN, line);
             } else {
-                reportScannerError("Operator < is not supported in j--.");
-                return getNextToken();
+                nextCh();
+                return new TokenInfo(MOD, line);
+            }
+        case '^': //added Exercise 2.11
+            if (ch == '=') {
+                nextCh();
+                return new TokenInfo(BWXOR_ASSIGN, line);
+            } else {
+                nextCh();
+                return new TokenInfo(BWXOR, line);
+            }
+        case '|': //added Exercise 2.11
+            if (ch == '=') {
+                nextCh();
+                return new TokenInfo(BWOR_ASSIGN, line);
+            } else if (ch == '|') {
+                nextCh();
+                return new TokenInfo(LOR, line);
+            } else {
+                nextCh();
+                return new TokenInfo(BWOR, line);
             }
         case '\'':
             buffer = new StringBuffer();
