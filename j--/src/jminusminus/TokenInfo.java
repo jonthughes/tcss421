@@ -45,7 +45,11 @@ enum TokenKind {
             
             //Literals
             IDENTIFIER("<IDENTIFIER>"), INT_LITERAL("<INT_LITERAL>"), 
-            CHAR_LITERAL("<CHAR_LITERAL>"), STRING_LITERAL("<STRING_LITERAL>");
+            CHAR_LITERAL("<CHAR_LITERAL>"), STRING_LITERAL("<STRING_LITERAL>"),
+            DOUBLE_LITERAL("<DOUBLE_LITERAL>"), FLOAT_LITERAL("<FLOAT_LITERAL>"),
+            LONG_LITERAL("<LONG_LITERAL>"), HEX_INT_LITERAL("<HEX_INT_LITERAL>"), 
+            OCTAL_INT_LITERAL("<OCTAL_INT_LITERAL>"), 
+            BINARY_INT_LITERAL("<BINARY_INT_LITERAL>"), BOOLEAN_LITERAL("<BOOLEAN_LITERAL>");
 
     /** The token's string representation. */
     private String image;

@@ -367,15 +367,118 @@ class Scanner {
                 buffer.append("\"");
             }
             return new TokenInfo(STRING_LITERAL, buffer.toString(), line);
-        case '.':
+        case '.': // TODO add double
+            buffer = new StringBuffer();
+            buffer.append(ch);
             nextCh();
-            return new TokenInfo(DOT, line);
+            if (isDigit(ch)) { //float .{0 -9} [(e|E) [+| -] (0 -9) {0 -9}] [f|F]
+                buffer.append(ch);
+                nextCh();
+                boolean atLeastOne = true;
+                while (isDigit(ch)) {
+                    buffer.append(ch);
+                    nextCh();
+                }
+                if (ch == 'e' || ch == 'E') {
+                    buffer.append(ch);
+                    nextCh();
+                    if (ch == '+' || ch == '-') {
+                        buffer.append(ch);
+                        nextCh();
+                    }
+                    atLeastOne = false;
+                    while (isDigit(ch)) {
+                        buffer.append(ch);
+                        nextCh();
+                        atLeastOne = true;
+                    }
+                    if (ch == 'f' || ch == 'F') {
+                        buffer.append(ch);
+                        nextCh();
+                    }
+                } else if (atLeastOne) {
+                    return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+                } else {
+                    reportScannerError("Invalid Float Literal.");
+                }
+            } else {
+                return new TokenInfo(DOT, line);
+            }
         case EOFCH:
             return new TokenInfo(EOF, line);
-        case '0':
-            // Handle only simple decimal integers for now.
+        case '0': // TODO add double
+            boolean atLeastOne = false; //to ensure at least 1 digit
+            buffer = new StringBuffer();
+            buffer.append(ch);
             nextCh();
-            return new TokenInfo(INT_LITERAL, "0", line);
+            if (ch == 'b' || ch == 'B') { //binary int 0 (b|B) (0-1){0-1}
+                buffer.append(ch);
+                nextCh();
+                while (ch == '0' || ch == '1') {
+                    buffer.append(ch);
+                    nextCh();
+                    atLeastOne = true;
+                } if (atLeastOne) {
+                    return new TokenInfo(BINARY_INT_LITERAL, buffer.toString(), line);
+                } else {
+                    reportScannerError("Invalid Hex Literal.");
+                }
+            } else if (ch == 'x' || ch == 'X') { //hex int 
+                          //0 (x|X) ((0 -9)|(A-F )|(a-f)) {(0 -9)|(A-F )|(a-f)}
+                buffer.append(ch);
+                nextCh();
+                while (isDigit(ch) || (ch >= 'a' && ch <= 'f') 
+                        || (ch >= 'A' && ch <= 'F')) {
+                    buffer.append(ch);
+                    nextCh();
+                    atLeastOne = true;
+                }
+                if (atLeastOne) {
+                    return new TokenInfo(HEX_INT_LITERAL, buffer.toString(), line);
+                } else {
+                    reportScannerError("Invalid Hex Literal.");
+                }
+            } else if (ch >= '0' && ch <= '7') { //octal int 0(0-7){0-7}
+                buffer.append(ch);
+                nextCh();
+                while (ch >= '0' && ch <= '7') {
+                    buffer.append(ch);
+                    nextCh();
+                }
+                return new TokenInfo(OCTAL_INT_LITERAL, buffer.toString(), line);
+            } else if (ch == '.') { //float (0-9){0-9}.{0-9}[(e|E)[+|-](0-9){0-9}][f|F]
+                buffer.append(ch);
+                nextCh();
+                while (isDigit(ch)) {
+                    buffer.append(ch);
+                    nextCh();
+                    atLeastOne = true;
+                }
+                if (ch == 'e' || ch == 'E') {
+                    buffer.append(ch);
+                    nextCh();
+                    if (ch == '+' || ch == '-') {
+                        buffer.append(ch);
+                        nextCh();
+                    }
+                    atLeastOne = false;
+                    while (isDigit(ch)) {
+                        buffer.append(ch);
+                        nextCh();
+                        atLeastOne = true;
+                    }
+                    if (ch == 'f' || ch == 'F') {
+                        buffer.append(ch);
+                        nextCh();
+                    }
+                } else if (atLeastOne) {
+                    return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+                } else {
+                    reportScannerError("Invalid Float Literal.");
+                }
+            } else {
+                return new TokenInfo(INT_LITERAL, "0", line);
+            }
         case '1':
         case '2':
         case '3':
@@ -390,7 +493,52 @@ class Scanner {
                 buffer.append(ch);
                 nextCh();
             }
-            return new TokenInfo(INT_LITERAL, buffer.toString(), line);
+            if (ch == 'l' || ch == 'L') { //long int
+                buffer.append(ch);
+                nextCh();
+                return new TokenInfo(LONG_LITERAL, buffer.toString(), line);
+            } else if (ch == 'f' || ch == 'F') { //float
+                buffer.append(ch);
+                nextCh();
+                return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+            } else if (ch == 'd' || ch == 'D') { //double
+                buffer.append(ch);
+                nextCh();
+                return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
+            } else if (ch == 'e' || ch == 'E') { //float
+                buffer.append(ch);
+                nextCh();
+                atLeastOne = false; //to ensure at least 1 digit
+                boolean isDouble = false; //if double instead of float
+                if (ch == '+' || ch == '-') {
+                    buffer.append(ch);
+                    nextCh();
+                }
+                while (isDigit(ch)) {
+                    buffer.append(ch);
+                    nextCh();
+                    atLeastOne = true;
+                }
+                if (ch == 'f' || ch == 'F') {
+                    buffer.append(ch);
+                    nextCh();
+                } else if (ch == 'd' || ch == 'D') { //check if double
+                    isDouble = true;
+                    buffer.append(ch);
+                    nextCh();
+                }
+                if (atLeastOne) {
+                    if (isDouble) {
+                        return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
+                    } else {
+                        return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+                    }
+                } else {
+                    reportScannerError("Invalid Float Literal.");
+                }
+            } else { //regular int
+                return new TokenInfo(INT_LITERAL, buffer.toString(), line);
+            }
         default:
             if (isIdentifierStart(ch)) {
                 buffer = new StringBuffer();
@@ -399,11 +547,21 @@ class Scanner {
                     nextCh();
                 }
                 String identifier = buffer.toString();
-                if (reserved.containsKey(identifier)) {
+//                if (reserved.containsKey(identifier)) { //added 2.14 boolean literal
+//                    if (identifier.equals("true") || identifier.equals("false") 
+//                            || identifier.equals("null")) {
+//                        return new TokenInfo(BOOLEAN_LITERAL, identifier, line);
+//                    } else {
+//                        return new TokenInfo(reserved.get(identifier), line);
+//                    }
+//                } else {
+//                    return new TokenInfo(IDENTIFIER, identifier, line);
+//                }
+                if (reserved.containsKey(identifier)) { //added 2.14 boolean literal
                     return new TokenInfo(reserved.get(identifier), line);
                 } else {
                     return new TokenInfo(IDENTIFIER, identifier, line);
-                }
+              }
             } else {
                 reportScannerError("Unidentified input token: '%c'", ch);
                 nextCh();
