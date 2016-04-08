@@ -16,19 +16,21 @@ package jminusminus;
 
 enum TokenKind {
     EOF("<EOF>"), 
-            //Keywords (53)
+            //Keywords (50 + 3)
             ABSTRACT("abstract"), ASSERT("assert"), BOOLEAN("boolean"), BREAK("break"), 
             BYTE("byte"), CASE("case"), CATCH("catch"), CHAR("char"), CLASS("class"), 
             CONST("const"), CONTINUE("continue"), DEFAULT("default"), DO("do"), DOUBLE("double"),
-            ELSE("else"), ENUM("enum"), EXTENDS("extends"), FALSE("false"), FINAL("final"), 
+            ELSE("else"), ENUM("enum"), EXTENDS("extends"), FINAL("final"), 
             FINALLY("finally"), FLOAT("float"), FOR("for"), GOTO("goto"), IF("if"), 
             IMPLEMENTS("implements"), IMPORT("import"), INSTANCEOF("instanceof"), INT("int"), 
-            INTERFACE("interface"), LONG("long"), NATIVE("native"), NEW("new"), NULL("null"), 
+            INTERFACE("interface"), LONG("long"), NATIVE("native"), NEW("new"),  
             PACKAGE("package"), PRIVATE("private"), PROTECTED("protected"), PUBLIC("public"), 
             RETURN("return"), SHORT("short"), STATIC("static"), STRICTFP("strictfp"), 
             SUPER("super"), SWITCH("switch"), SYNCHRONIZED("synchronized"), THIS("this"), 
-            THROW("throw"), THROWS("throws"), TRANSIENT("transient"), TRUE("true"), 
+            THROW("throw"), THROWS("throws"), TRANSIENT("transient"),  
             TRY("try"), VOID("void"), VOLATILE("volatile"), WHILE("while"), 
+            //TRUE, FALSE, and NULL - are actually boolean/null literals
+            TRUE("true"), FALSE("false"), NULL("null"),
             
             //Operators (38)
             PLUS("+"), ASSIGN("="), DEC("--"), EQUAL("=="), GT(">"), INC("++"), LAND("&&"), 
@@ -43,12 +45,12 @@ enum TokenKind {
             LPAREN("("), RPAREN(")"), LCURLY("{"), RCURLY("}"), LBRACK("["), RBRACK("]"), 
             SEMI(";"), COMMA(","), DOT("."), 
             
-            //Literals
+            //Literals (11)
             IDENTIFIER("<IDENTIFIER>"), INT_LITERAL("<INT_LITERAL>"), 
             CHAR_LITERAL("<CHAR_LITERAL>"), STRING_LITERAL("<STRING_LITERAL>"),
             DOUBLE_LITERAL("<DOUBLE_LITERAL>"), FLOAT_LITERAL("<FLOAT_LITERAL>"),
             LONG_LITERAL("<LONG_LITERAL>"), HEX_INT_LITERAL("<HEX_INT_LITERAL>"), 
-            OCTAL_INT_LITERAL("<OCTAL_INT_LITERAL>"), 
+            OCTAL_INT_LITERAL("<OCTAL_INT_LITERAL>"), NULL_LITERAL("<NULL_LITERAL>"),
             BINARY_INT_LITERAL("<BINARY_INT_LITERAL>"), BOOLEAN_LITERAL("<BOOLEAN_LITERAL>");
 
     /** The token's string representation. */

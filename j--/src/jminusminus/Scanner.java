@@ -367,7 +367,7 @@ class Scanner {
                 buffer.append("\"");
             }
             return new TokenInfo(STRING_LITERAL, buffer.toString(), line);
-        case '.': // TODO add double
+        case '.':
             buffer = new StringBuffer();
             buffer.append(ch);
             nextCh();
@@ -392,21 +392,28 @@ class Scanner {
                         nextCh();
                         atLeastOne = true;
                     }
+                }
+                if (atLeastOne) {
                     if (ch == 'f' || ch == 'F') {
                         buffer.append(ch);
                         nextCh();
+                        return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+                    } else {
+                        if (ch == 'd' || ch == 'D') {
+                            buffer.append(ch);
+                            nextCh();
+                        }
+                        return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
                     }
-                } else if (atLeastOne) {
-                    return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
                 } else {
-                    reportScannerError("Invalid Float Literal.");
+                    reportScannerError("Invalid Float or Double Literal.");
                 }
             } else {
                 return new TokenInfo(DOT, line);
             }
         case EOFCH:
             return new TokenInfo(EOF, line);
-        case '0': // TODO add double
+        case '0':
             boolean atLeastOne = false; //to ensure at least 1 digit
             buffer = new StringBuffer();
             buffer.append(ch);
@@ -446,35 +453,87 @@ class Scanner {
                     nextCh();
                 }
                 return new TokenInfo(OCTAL_INT_LITERAL, buffer.toString(), line);
-            } else if (ch == '.') { //float (0-9){0-9}.{0-9}[(e|E)[+|-](0-9){0-9}][f|F]
+            } else if (ch == 'f' || ch == 'F') { //float
                 buffer.append(ch);
                 nextCh();
+                return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+            } else if (ch == 'd' || ch == 'D') { //double
+                buffer.append(ch);
+                nextCh();
+                return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
+            } else if (ch == 'e' || ch == 'E') { //float
+                buffer.append(ch);
+                nextCh();
+                atLeastOne = false; //to ensure at least 1 digit
+                boolean isDouble = true; //if double instead of float
+                if (ch == '+' || ch == '-') {
+                    buffer.append(ch);
+                    nextCh();
+                }
                 while (isDigit(ch)) {
                     buffer.append(ch);
                     nextCh();
                     atLeastOne = true;
                 }
-                if (ch == 'e' || ch == 'E') {
+                if (ch == 'f' || ch == 'F') {
                     buffer.append(ch);
                     nextCh();
-                    if (ch == '+' || ch == '-') {
-                        buffer.append(ch);
-                        nextCh();
+                    isDouble = false;
+                } else if (ch == 'd' || ch == 'D') { //check if double                    
+                    buffer.append(ch);
+                    nextCh();
+                }
+                if (atLeastOne) {
+                    if (isDouble) {
+                        return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
+                    } else {
+                        return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
                     }
-                    atLeastOne = false;
+                } else {
+                    reportScannerError("Invalid Float Literal.");
+                }
+            } else if (ch == '.') { //float (0-9){0-9}.{0-9}[(e|E)[+|-](0-9){0-9}][f|F]
+                buffer.append(ch);
+                nextCh();
+                if (isDigit(ch)) { //float .{0 -9} [(e|E) [+| -] (0 -9) {0 -9}] [f|F]
+                    buffer.append(ch);
+                    nextCh();
+                    atLeastOne = true;
                     while (isDigit(ch)) {
                         buffer.append(ch);
                         nextCh();
-                        atLeastOne = true;
                     }
-                    if (ch == 'f' || ch == 'F') {
+                    if (ch == 'e' || ch == 'E') {
                         buffer.append(ch);
                         nextCh();
+                        if (ch == '+' || ch == '-') {
+                            buffer.append(ch);
+                            nextCh();
+                        }
+                        atLeastOne = false;
+                        while (isDigit(ch)) {
+                            buffer.append(ch);
+                            nextCh();
+                            atLeastOne = true;
+                        }
                     }
-                } else if (atLeastOne) {
-                    return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+                    if (atLeastOne) {
+                        if (ch == 'f' || ch == 'F') {
+                            buffer.append(ch);
+                            nextCh();
+                            return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+                        } else {
+                            if (ch == 'd' || ch == 'D') {
+                                buffer.append(ch);
+                                nextCh();
+                            }
+                            return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
+                        }
+                    } else {
+                        reportScannerError("Invalid Float or Double Literal.");
+                    }
                 } else {
-                    reportScannerError("Invalid Float Literal.");
+                    return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
                 }
             } else {
                 return new TokenInfo(INT_LITERAL, "0", line);
@@ -487,7 +546,7 @@ class Scanner {
         case '6':
         case '7':
         case '8':
-        case '9':
+        case '9': //@ TODO add after period
             buffer = new StringBuffer();
             while (isDigit(ch)) {
                 buffer.append(ch);
@@ -509,7 +568,7 @@ class Scanner {
                 buffer.append(ch);
                 nextCh();
                 atLeastOne = false; //to ensure at least 1 digit
-                boolean isDouble = false; //if double instead of float
+                boolean isDouble = true; //if double instead of float
                 if (ch == '+' || ch == '-') {
                     buffer.append(ch);
                     nextCh();
@@ -522,8 +581,8 @@ class Scanner {
                 if (ch == 'f' || ch == 'F') {
                     buffer.append(ch);
                     nextCh();
-                } else if (ch == 'd' || ch == 'D') { //check if double
-                    isDouble = true;
+                    isDouble = false;
+                } else if (ch == 'd' || ch == 'D') { //check if double                    
                     buffer.append(ch);
                     nextCh();
                 }
@@ -536,6 +595,59 @@ class Scanner {
                 } else {
                     reportScannerError("Invalid Float Literal.");
                 }
+            } else if (ch == '.') { 
+                buffer.append(ch);
+                nextCh();
+                if (isDigit(ch)) { //float .{0 -9} [(e|E) [+| -] (0 -9) {0 -9}] [f|F]
+                    buffer.append(ch);
+                    nextCh();
+                    atLeastOne = true;
+                    while (isDigit(ch)) {
+                        buffer.append(ch);
+                        nextCh();
+                    }
+                    if (ch == 'e' || ch == 'E') {
+                        buffer.append(ch);
+                        nextCh();
+                        if (ch == '+' || ch == '-') {
+                            buffer.append(ch);
+                            nextCh();
+                        }
+                        atLeastOne = false;
+                        while (isDigit(ch)) {
+                            buffer.append(ch);
+                            nextCh();
+                            atLeastOne = true;
+                        }
+                    }
+                    if (atLeastOne) {
+                        if (ch == 'f' || ch == 'F') {
+                            buffer.append(ch);
+                            nextCh();
+                            return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+                        } else {
+                            if (ch == 'd' || ch == 'D') {
+                                buffer.append(ch);
+                                nextCh();
+                            }
+                            return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
+                        }
+                    } else {
+                        reportScannerError("Invalid Float or Double Literal.");
+                    }
+                } else {
+                    if (ch == 'f' || ch == 'F') {
+                        buffer.append(ch);
+                        nextCh();
+                        return new TokenInfo(FLOAT_LITERAL, buffer.toString(), line);
+                    } else {
+                        if (ch == 'd' || ch == 'D') {
+                            buffer.append(ch);
+                            nextCh();
+                        }
+                        return new TokenInfo(DOUBLE_LITERAL, buffer.toString(), line);
+                    }
+                }
             } else { //regular int
                 return new TokenInfo(INT_LITERAL, buffer.toString(), line);
             }
@@ -547,21 +659,17 @@ class Scanner {
                     nextCh();
                 }
                 String identifier = buffer.toString();
-//                if (reserved.containsKey(identifier)) { //added 2.14 boolean literal
-//                    if (identifier.equals("true") || identifier.equals("false") 
-//                            || identifier.equals("null")) {
-//                        return new TokenInfo(BOOLEAN_LITERAL, identifier, line);
-//                    } else {
-//                        return new TokenInfo(reserved.get(identifier), line);
-//                    }
-//                } else {
-//                    return new TokenInfo(IDENTIFIER, identifier, line);
-//                }
                 if (reserved.containsKey(identifier)) { //added 2.14 boolean literal
-                    return new TokenInfo(reserved.get(identifier), line);
+                    if (identifier.equals("true") || identifier.equals("false")) {
+                        return new TokenInfo(BOOLEAN_LITERAL, identifier, line);
+                    } else if (identifier.equals("null")){
+                        return new TokenInfo(NULL_LITERAL, identifier, line);
+                    } else {
+                        return new TokenInfo(reserved.get(identifier), line);
+                    }
                 } else {
                     return new TokenInfo(IDENTIFIER, identifier, line);
-              }
+                }
             } else {
                 reportScannerError("Unidentified input token: '%c'", ch);
                 nextCh();
