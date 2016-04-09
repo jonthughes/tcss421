@@ -660,13 +660,14 @@ class Scanner {
                 }
                 String identifier = buffer.toString();
                 if (reserved.containsKey(identifier)) { //added 2.14 boolean literal
-                    if (identifier.equals("true") || identifier.equals("false")) {
-                        return new TokenInfo(BOOLEAN_LITERAL, identifier, line);
-                    } else if (identifier.equals("null")){
-                        return new TokenInfo(NULL_LITERAL, identifier, line);
-                    } else {
-                        return new TokenInfo(reserved.get(identifier), line);
-                    }
+//                    if (identifier.equals("true") || identifier.equals("false")) {
+//                        return new TokenInfo(BOOLEAN_LITERAL, identifier, line);
+//                    } else if (identifier.equals("null")){
+//                        return new TokenInfo(NULL_LITERAL, identifier, line);
+//                    } else {
+//                        return new TokenInfo(reserved.get(identifier), line);
+//                    }
+                    return new TokenInfo(reserved.get(identifier), line);
                 } else {
                     return new TokenInfo(IDENTIFIER, identifier, line);
                 }

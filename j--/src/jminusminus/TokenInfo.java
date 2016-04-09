@@ -16,7 +16,7 @@ package jminusminus;
 
 enum TokenKind {
     EOF("<EOF>"), 
-            //Keywords (50 + 3)
+            //Reserved Words (50 + 3)
             ABSTRACT("abstract"), ASSERT("assert"), BOOLEAN("boolean"), BREAK("break"), 
             BYTE("byte"), CASE("case"), CATCH("catch"), CHAR("char"), CLASS("class"), 
             CONST("const"), CONTINUE("continue"), DEFAULT("default"), DO("do"), DOUBLE("double"),
@@ -29,7 +29,7 @@ enum TokenKind {
             SUPER("super"), SWITCH("switch"), SYNCHRONIZED("synchronized"), THIS("this"), 
             THROW("throw"), THROWS("throws"), TRANSIENT("transient"),  
             TRY("try"), VOID("void"), VOLATILE("volatile"), WHILE("while"), 
-            //TRUE, FALSE, and NULL - are actually boolean/null literals
+            //sort of keywords TRUE, FALSE, and NULL - are actually boolean/null literals
             TRUE("true"), FALSE("false"), NULL("null"),
             
             //Operators (38)
