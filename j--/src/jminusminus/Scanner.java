@@ -428,7 +428,7 @@ class Scanner {
                 } if (atLeastOne) {
                     return new TokenInfo(BINARY_INT_LITERAL, buffer.toString(), line);
                 } else {
-                    reportScannerError("Invalid Hex Literal.");
+                    reportScannerError("Invalid Binary Literal.");
                 }
             } else if (ch == 'x' || ch == 'X') { //hex int 
                           //0 (x|X) ((0 -9)|(A-F )|(a-f)) {(0 -9)|(A-F )|(a-f)}
@@ -546,7 +546,7 @@ class Scanner {
         case '6':
         case '7':
         case '8':
-        case '9': //@ TODO add after period
+        case '9': 
             buffer = new StringBuffer();
             while (isDigit(ch)) {
                 buffer.append(ch);

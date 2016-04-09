@@ -1,5 +1,9 @@
-package pass;
-
+/**
+ * A file to test the j-- compiler for TCSS 421 Project's part 1.
+ * 
+ * @version 08 April 2016
+ * @author Jonathan Hughes  
+ */
 public class Part1Test {
        
     public static void main(String[] args) {
@@ -112,7 +116,9 @@ public class Part1Test {
         native 
         super 
         while
-        //null, true, false - actually null/boolean literals         
+        true
+        false
+        null
         
         
         /**********************************************************************
@@ -126,6 +132,7 @@ public class Part1Test {
         0.0 
         3.14 
         1e-9d 
+        1e-9D
         1e137
         1239487274.23746
         
@@ -140,18 +147,12 @@ public class Part1Test {
         
         //float literal
         1e1f 
-        2.f 
+        2.F 
         .3f 
-        0f 
+        0F 
         3.14f 
         6.022137e+23f
         
-        //boolean literals          
-        true 
-        false 
-        
-        //null literal
-        null
         
         /**********************************************************************
          * testing Bonus Exercise 2.15 recognize and return all other         *
