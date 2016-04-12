@@ -169,5 +169,15 @@ public class Part1Test {
         //hex int
         0xA454E
         0XABCDEF0123456789
+        
+        //invalid binary
+        0b1234
+        
+        //invalid octal
+        098989
+        
+        //invalid hex
+        0x324GG
     }    
 }
+/* Invalid multiline comment
