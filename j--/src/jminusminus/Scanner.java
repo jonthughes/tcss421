@@ -142,7 +142,11 @@ class Scanner {
                 else if (ch == '*'){ // Ignore multi-line comment Exercise 2.10
                     char prevCh = ch;
                     nextCh();
-                    while (!(ch == '/' && prevCh == '*') && ch != EOFCH) {
+                    while (!(ch == '/' && prevCh == '*')) {
+                        if (ch == EOFCH) {
+                            reportScannerError("Unexpected end of line found in comment.");
+                            break;
+                        }
                         prevCh = ch;
                         nextCh();
                     }  
@@ -425,7 +429,10 @@ class Scanner {
                     buffer.append(ch);
                     nextCh();
                     atLeastOne = true;
-                } if (atLeastOne) {
+                } 
+                if (ch >= '2' && ch <= '9' || isIdentifierStart(ch)) {
+                    reportScannerError("Invalid Binary Literal.");
+                } else if (atLeastOne) {
                     return new TokenInfo(BINARY_INT_LITERAL, buffer.toString(), line);
                 } else {
                     reportScannerError("Invalid Binary Literal.");
@@ -440,7 +447,9 @@ class Scanner {
                     nextCh();
                     atLeastOne = true;
                 }
-                if (atLeastOne) {
+                if ((ch >= 'g' && ch <= 'z') || (ch >= 'G' && ch <= 'Z')) {
+                    reportScannerError("Invalid Hex Literal.");
+                } else if (atLeastOne) {
                     return new TokenInfo(HEX_INT_LITERAL, buffer.toString(), line);
                 } else {
                     reportScannerError("Invalid Hex Literal.");
@@ -453,6 +462,8 @@ class Scanner {
                     nextCh();
                 }
                 return new TokenInfo(OCTAL_INT_LITERAL, buffer.toString(), line);
+            } else if (ch >= '8' && ch <= '9') { 
+                reportScannerError("Invalid Octal Literal.");
             } else if (ch == 'f' || ch == 'F') { //float
                 buffer.append(ch);
                 nextCh();
