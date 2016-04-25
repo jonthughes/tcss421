@@ -152,7 +152,8 @@ class Scanner {
                     }  
                     nextCh();
                 } else if (ch == '='){ //added Exercise 2.11
-                    return new TokenInfo (DIV_ASSIGN , line );
+                    nextCh();
+                    return new TokenInfo (DIV_ASSIGN , line );                   
                 } else { //added Exercise 2.11
                     return new TokenInfo (DIV , line );
                 }
@@ -207,8 +208,7 @@ class Scanner {
             if (ch == '=') { //added Exercise 2.11
                 nextCh();
                 return new TokenInfo(STAR_ASSIGN, line);
-            } else {
-                nextCh();
+            } else {              
                 return new TokenInfo(STAR, line);
             }
         case '+':
@@ -297,22 +297,23 @@ class Scanner {
             nextCh();
             return new TokenInfo(COLON, line);
         case '%': //added Exercise 2.11
+            nextCh();
             if (ch == '=') {
                 nextCh();
                 return new TokenInfo(MOD_ASSIGN, line);
             } else {
-                nextCh();
                 return new TokenInfo(MOD, line);
             }
         case '^': //added Exercise 2.11
+            nextCh();
             if (ch == '=') {
                 nextCh();
                 return new TokenInfo(BWXOR_ASSIGN, line);
             } else {
-                nextCh();
                 return new TokenInfo(BWXOR, line);
             }
         case '|': //added Exercise 2.11
+            nextCh();
             if (ch == '=') {
                 nextCh();
                 return new TokenInfo(BWOR_ASSIGN, line);
@@ -320,7 +321,6 @@ class Scanner {
                 nextCh();
                 return new TokenInfo(LOR, line);
             } else {
-                nextCh();
                 return new TokenInfo(BWOR, line);
             }
         case '\'':
