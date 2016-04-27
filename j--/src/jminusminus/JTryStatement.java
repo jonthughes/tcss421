@@ -9,18 +9,25 @@ package jminusminus;
 import static jminusminus.CLConstants.*;
 
 /**
- * The AST node for a switch default-statement.
+ * The AST node for a try-statement.
  */
 
-class JSwitchDefaultStatement extends JStatement {
+class JTryStatement extends JStatement {
 
-    /** The body. */
-    private JStatement case_body;
+    JStatement try_statement;
+    JFormalParameter catch_param;
+    JStatement catch_statement;
+    JStatement finally_statement;
 
 
-    public JSwitchDefaultStatement(int line, JStatement case_body) {
+    public JTryStatement(int line, JStatement try_statement, JFormalParameter catch_param, 
+            JStatement catch_statement, JStatement finally_statement) {
         super(line);
-        this.case_body = case_body;
+        this.try_statement = try_statement;
+        this.catch_param = catch_param;
+        this.catch_statement = catch_statement;
+        this.finally_statement = finally_statement;
+        
     }
 
 

@@ -1,7 +1,9 @@
+import java.io.IOException;
+
 /**
  * A file to test the j-- compiler for TCSS 421 Project's part 2.
  * 
- * @version 20 April 2016
+ * @version 26 April 2016
  * @author Jonathan Hughes  
  */
 public class Part2Test {
@@ -220,16 +222,43 @@ public class Part2Test {
          * testing Exercise 3.27 Modify the Parser to parse and return nodes  *
          *                       for the try-catch-finally statement.         *
          **********************************************************************/
+        //try-catch-finally
+        boolean c = false;
+        if (c) {
+            try {
+                throw new IOException();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                i += x;
+            }
+        }
         
         /**********************************************************************
          * testing Exercise 3.28 Modify the Parser to parse and return nodes  *
          *                       for the throw-statement.                     *
          **********************************************************************/
-        
+        //throw statement
+        if (c) {
+            try {
+                throw new IOException();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                i += x;
+            }
+        }
+    }
         /**********************************************************************
          * testing Exercise 3.29 Modify the Parser to deal with a             *
          *                       throws-clause in method declarations.        *
          **********************************************************************/
+        //method with throws-clause
+        public void method() throws IOException {
+            
+        }  
         
         /**********************************************************************
          * Bonus
@@ -237,6 +266,15 @@ public class Part2Test {
          *                       constructors having variable arity, that is, * 
          *                       a variable number of arguments.              *
          **********************************************************************/
+        //method with variable # of arguments
+        public void method2(int a, String... args) {
+            
+        } 
+        
+        //constructor with variable # of arguments
+        public Part2Test(String s, int b, int... args) {
+
+        }
         
         /**********************************************************************
          * Bonus
@@ -250,6 +288,12 @@ public class Part2Test {
          *   new do-until statement. Modify the Scanner to deal with any      *
          *   necessary new token(s).                                          *
          **********************************************************************/
+        //do-until statement
+        public void bonus2() {
+            int x = 2;
+            do { 
+                x = x * x; 
+            } until (x > 1000); 
+        }
         
-    }    
 }

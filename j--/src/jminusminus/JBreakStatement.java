@@ -1,7 +1,15 @@
 // Copyright 2013 Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-
+/**
+ * Modified by 
+ * @author Jonathan Hughes
+ * @date 26 April 2016
+ */
 package jminusminus;
-
+/**
+ * Modified by 
+ * @author Jonathan Hughes
+ * @date 26 April 2016
+ */
 import static jminusminus.CLConstants.*;
 
 /**

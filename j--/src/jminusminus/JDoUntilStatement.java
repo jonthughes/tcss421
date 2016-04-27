@@ -9,18 +9,20 @@ package jminusminus;
 import static jminusminus.CLConstants.*;
 
 /**
- * The AST node for a switch default-statement.
+ * The AST node for a do-until-statement.
  */
 
-class JSwitchDefaultStatement extends JStatement {
+class JDoUntilStatement extends JStatement {
 
-    /** The body. */
-    private JStatement case_body;
+    JStatement do_statement;
+    JExpression until_expression;
 
 
-    public JSwitchDefaultStatement(int line, JStatement case_body) {
+    public JDoUntilStatement(int line, JStatement do_statement, 
+            JExpression until_expression) {
         super(line);
-        this.case_body = case_body;
+        this.do_statement = do_statement;
+        this.until_expression = until_expression;        
     }
 
 

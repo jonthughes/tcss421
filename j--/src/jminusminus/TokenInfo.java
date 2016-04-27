@@ -9,7 +9,7 @@ package jminusminus;
  * When you add a new token to the scanner, you must also add an entry to this
  * enum specifying the kind and image of the new token.
  * 
- * @version 05 April 2016
+ * @version 26 April 2016
  * @author Modified by: Jonathan Hughes 
  * @author Original: Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
  */
@@ -51,8 +51,11 @@ enum TokenKind {
             DOUBLE_LITERAL("<DOUBLE_LITERAL>"), FLOAT_LITERAL("<FLOAT_LITERAL>"),
             LONG_LITERAL("<LONG_LITERAL>"), HEX_INT_LITERAL("<HEX_INT_LITERAL>"), 
             OCTAL_INT_LITERAL("<OCTAL_INT_LITERAL>"), NULL_LITERAL("<NULL_LITERAL>"),
-            BINARY_INT_LITERAL("<BINARY_INT_LITERAL>"), BOOLEAN_LITERAL("<BOOLEAN_LITERAL>");
+            BINARY_INT_LITERAL("<BINARY_INT_LITERAL>"), BOOLEAN_LITERAL("<BOOLEAN_LITERAL>"),
 
+            //bonus (2)
+            TRIPLEDOT("..."), UNTIL("until");
+    
     /** The token's string representation. */
     private String image;
 

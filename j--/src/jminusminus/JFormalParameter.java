@@ -1,5 +1,9 @@
 // Copyright 2013 Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-
+/**
+ * Modified by 
+ * @author Jonathan Hughes
+ * @date 26 April 2016
+ */
 package jminusminus;
 
 /**
@@ -14,6 +18,9 @@ class JFormalParameter extends JAST {
 
     /** Parameter type. */
     private Type type;
+    
+    //added bonus 3.30
+    boolean variable_arity; //true if yes
 
     /**
      * Construct an AST node for a formal parameter declaration given its line
@@ -27,10 +34,11 @@ class JFormalParameter extends JAST {
      *            parameter type.
      */
 
-    public JFormalParameter(int line, String name, Type type) {
+    public JFormalParameter(int line, String name, Type type, boolean variable_arity) {
         super(line);
         this.name = name;
         this.type = type;
+        this.variable_arity = variable_arity;
     }
 
     /**

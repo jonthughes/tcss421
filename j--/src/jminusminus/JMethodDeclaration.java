@@ -1,5 +1,9 @@
 // Copyright 2011 Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-
+/**
+ * Modified by 
+ * @author Jonathan Hughes
+ * @date 26 April 2016
+ */
 package jminusminus;
 
 import java.util.ArrayList;
@@ -41,6 +45,9 @@ class JMethodDeclaration
 
     /** Is method private. */
     protected boolean isPrivate;
+    
+    //added 3.29
+    protected JExpression throws_clause;
 
     /**
      * Construct an AST node for a method declaration given the
@@ -64,7 +71,8 @@ class JMethodDeclaration
 
     public JMethodDeclaration(int line, ArrayList<String> mods,
         String name, Type returnType,
-        ArrayList<JFormalParameter> params, JBlock body)
+        ArrayList<JFormalParameter> params, JBlock body, 
+        JExpression throws_clause)
 
     {
         super(line);
@@ -76,6 +84,7 @@ class JMethodDeclaration
         this.isAbstract = mods.contains("abstract");
         this.isStatic = mods.contains("static");
         this.isPrivate = mods.contains("private");
+        this.throws_clause = throws_clause;
     }
 
     /**
