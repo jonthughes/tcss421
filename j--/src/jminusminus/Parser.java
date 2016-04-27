@@ -678,6 +678,7 @@ public class Parser {
             JStatement do_statement = statement();
             mustBe(UNTIL);
             JExpression until_expression = parExpression();
+            mustBe(SEMI);
             return new JDoUntilStatement(line, do_statement, until_expression);
         } else if (have(THROW)) { //added 3.28
             JStatement statement = statement();
