@@ -1,5 +1,9 @@
 // Copyright 2013 Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-
+/**
+ * Modified by 
+ * @author Jonathan Hughes
+ * @date 26 April 2016
+ */
 package jminusminus;
 
 import java.util.ArrayList;
@@ -37,10 +41,12 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
      */
 
     public JConstructorDeclaration(int line, ArrayList<String> mods,
-            String name, ArrayList<JFormalParameter> params, JBlock body)
+            String name, ArrayList<JFormalParameter> params, JBlock body, 
+            JExpression throws_clause)
 
     {
-        super(line, mods, name, Type.CONSTRUCTOR, params, body);
+        super(line, mods, name, Type.CONSTRUCTOR, params, body, 
+                throws_clause);
     }
 
     /**

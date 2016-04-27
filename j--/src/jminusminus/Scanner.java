@@ -113,7 +113,7 @@ class Scanner {
         reserved.put(VOID.image(), VOID);
         reserved.put(VOLATILE.image(), VOLATILE); //added Exercise 2.12
         reserved.put(WHILE.image(), WHILE);
-
+        reserved.put(UNTIL.image(), UNTIL); //added Bonus Exercise 3.34
         // Prime the pump.
         nextCh();
     }
@@ -412,6 +412,14 @@ class Scanner {
                 } else {
                     reportScannerError("Invalid Float or Double Literal.");
                 }
+            } else if (ch == '.') {
+                nextCh();
+                if (ch == '.') {
+                    nextCh();
+                    return new TokenInfo(TRIPLEDOT, line);
+                } else {
+                    reportScannerError("Two dots are invalid.  Should be 1 or 3.");
+                }             
             } else {
                 return new TokenInfo(DOT, line);
             }

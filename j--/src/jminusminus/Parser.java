@@ -1,5 +1,9 @@
 // Copyright 2013 Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-
+/**
+ * Modified by 
+ * @author Jonathan Hughes
+ * @date 26 April 2016
+ */
 package jminusminus;
 
 import java.util.ArrayList;
@@ -556,14 +560,18 @@ public class Parser {
     private JMember memberDecl(ArrayList<String> mods) {
         int line = scanner.token().line();
         JMember memberDecl = null;
+        JExpression throws_clause = null;//added 3.29
         if (seeIdentLParen()) {
             // A constructor
             mustBe(IDENTIFIER);
             String name = scanner.previousToken().image();
             ArrayList<JFormalParameter> params = formalParameters();
+            if (have(THROWS)) { //added 3.29
+                throws_clause = expression();
+            }
             JBlock body = block();
             memberDecl = new JConstructorDeclaration(line, mods, name, params,
-                    body);
+                    body, throws_clause);
         } else {
             Type type = null;
             if (have(VOID)) {
@@ -572,9 +580,12 @@ public class Parser {
                 mustBe(IDENTIFIER);
                 String name = scanner.previousToken().image();
                 ArrayList<JFormalParameter> params = formalParameters();
+                if (have(THROWS)) {//added 3.29
+                    throws_clause = expression();
+                }
                 JBlock body = have(SEMI) ? null : block();
                 memberDecl = new JMethodDeclaration(line, mods, name, type,
-                        params, body);
+                        params, body, throws_clause);
             } else {
                 type = type();
                 if (seeIdentLParen()) {
@@ -582,9 +593,12 @@ public class Parser {
                     mustBe(IDENTIFIER);
                     String name = scanner.previousToken().image();
                     ArrayList<JFormalParameter> params = formalParameters();
+                    if (have(THROWS)) {//added 3.29
+                        throws_clause = expression();
+                    }
                     JBlock body = have(SEMI) ? null : block();
                     memberDecl = new JMethodDeclaration(line, mods, name, type,
-                            params, body);
+                            params, body, throws_clause);
                 } else {
                     // Field
                     memberDecl = new JFieldDeclaration(line, mods,
@@ -660,6 +674,24 @@ public class Parser {
             JStatement consequent = statement();
             JStatement alternate = have(ELSE) ? statement() : null;
             return new JIfStatement(line, test, consequent, alternate);
+        } else if (have(DO)) { //added 3.34 bonus
+            JStatement do_statement = statement();
+            mustBe(UNTIL);
+            JExpression until_expression = parExpression();
+            return new JDoUntilStatement(line, do_statement, until_expression);
+        } else if (have(THROW)) { //added 3.28
+            JStatement statement = statement();
+            return new JThrowStatement(line, statement);
+        } else if (have(TRY)) { //added 3.27
+            JStatement try_statement = statement();
+            mustBe(CATCH);
+            mustBe(LPAREN);
+            JFormalParameter catch_param = formalParameter();
+            mustBe(RPAREN);
+            JStatement catch_statement = statement();
+            JStatement finally_statement = have(FINALLY) ? statement() : null;
+            return new JTryStatement(line, try_statement, catch_param, 
+                    catch_statement, finally_statement);
         } else if (have(FOR)) { //added 3.25
             mustBe(LPAREN);   
             if (seeBasicType()) { //if being intialized
@@ -760,9 +792,13 @@ public class Parser {
     private JFormalParameter formalParameter() {
         int line = scanner.token().line();
         Type type = type();
+        boolean variable_arity = false;
+        if(have(TRIPLEDOT)) { //added 3.30 bonus
+            variable_arity = true;
+        }
         mustBe(IDENTIFIER);
         String name = scanner.previousToken().image();
-        return new JFormalParameter(line, name, type);
+        return new JFormalParameter(line, name, type, variable_arity);
     }
 
     /**

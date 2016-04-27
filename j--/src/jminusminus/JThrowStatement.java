@@ -9,18 +9,18 @@ package jminusminus;
 import static jminusminus.CLConstants.*;
 
 /**
- * The AST node for a switch default-statement.
+ * The AST node for a throw-statement.
  */
+//added 3.28
 
-class JSwitchDefaultStatement extends JStatement {
+class JThrowStatement extends JStatement {
 
-    /** The body. */
-    private JStatement case_body;
+    JStatement statement;
 
-
-    public JSwitchDefaultStatement(int line, JStatement case_body) {
+    public JThrowStatement(int line, JStatement statement) {
         super(line);
-        this.case_body = case_body;
+        this.statement = statement;
+        
     }
 
 
