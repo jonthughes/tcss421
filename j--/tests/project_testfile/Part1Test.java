@@ -18,6 +18,9 @@ public class Part1Test {
          */
         /** Trying on one line */
         
+        //invalid
+        /*/ asdjfksajdfkdljflkjf */
+        
         
         /**********************************************************************
          * testing Exercise 2.11 recognize and return all Java                *

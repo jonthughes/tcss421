@@ -178,10 +178,23 @@ class JCompilationUnit extends JAST {
      *            context in which names are resolved (ignored here).
      * @return the analyzed (and possibly rewritten) AST subtree.
      */
-
+    //modified in exercise 4.1
     public JAST analyze(Context context) {
+        int publicClasses = 0;
         for (JAST typeDeclaration : typeDeclarations) {
             typeDeclaration.analyze(this.context);
+            
+            //check if the class is public
+            ArrayList<String> mods = ((JClassDeclaration) typeDeclaration).getMods();
+            if (mods.contains("public")) {
+                publicClasses++; //increment if class is public
+            }
+        }
+        //if there are multiple public type declarations that are public,
+        //throw a semantic error
+        if (publicClasses > 1) {
+            JAST.compilationUnit.reportSemanticError(line,
+                    "Only one public type declaration allowed, " + publicClasses + " found."  , publicClasses);
         }
         return this;
     }

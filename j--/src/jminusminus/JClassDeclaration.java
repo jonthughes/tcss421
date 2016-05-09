@@ -101,6 +101,16 @@ class JClassDeclaration extends JAST implements JTypeDecl {
     }
 
     /**
+     * Return the mods of this class.
+     * 
+     * @return the mods.
+     */
+    //added 4.1
+    public ArrayList<String> getMods() {
+        return mods;
+    }
+    
+    /**
      * The initializations for instance fields (now expressed as assignment
      * statments).
      * 

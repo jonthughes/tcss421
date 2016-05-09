@@ -4,6 +4,8 @@ package jminusminus;
 
 import static jminusminus.CLConstants.*;
 
+import java.util.ArrayList;
+
 /**
  * The AST node for an identifier used as a primary expression.
  */
@@ -19,6 +21,8 @@ class JVariable extends JExpression implements JLhs {
     /** Was analyzeLhs() done? */
     private boolean analyzeLhs;
 
+    private int line;
+    
     /**
      * Construct the AST node for a variable given its line number and name.
      * 
@@ -30,6 +34,7 @@ class JVariable extends JExpression implements JLhs {
 
     public JVariable(int line, String name) {
         super(line);
+        this.line = line;
         this.name = name;
     }
 
@@ -73,6 +78,13 @@ class JVariable extends JExpression implements JLhs {
                 type = Type.ANY;
                 JAST.compilationUnit.reportSemanticError(line,
                         "Cannot find name: " + name);
+                //exercise 4.2
+                //declare that a new local variable with Type.ANY
+                iDefn = new LocalVariableDefn(type, 0);
+                //add to symbol table
+                context.addEntry(line, name, iDefn);
+                //return modified symbol
+                return this;
             } else {
                 // Rewrite a variable denoting a field as an
                 // explicit field selection
@@ -95,7 +107,7 @@ class JVariable extends JExpression implements JLhs {
         }
         return this;
     }
-
+    
     /**
      * Analyze the identifier as used on the lhs of an assignment.
      * 

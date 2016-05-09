@@ -140,6 +140,7 @@ class Scanner {
                     }
                 }                 
                 else if (ch == '*'){ // Ignore multi-line comment Exercise 2.10
+                    nextCh();
                     char prevCh = ch;
                     nextCh();
                     while (!(ch == '/' && prevCh == '*')) {

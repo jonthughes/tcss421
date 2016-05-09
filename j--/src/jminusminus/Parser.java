@@ -374,7 +374,7 @@ public class Parser {
         while (!see(EOF)) {
             JAST typeDeclaration = typeDeclaration();
             if (typeDeclaration != null) {
-                typeDeclarations.add(typeDeclaration);
+                typeDeclarations.add(typeDeclaration); 
             }
         }
         mustBe(EOF);
